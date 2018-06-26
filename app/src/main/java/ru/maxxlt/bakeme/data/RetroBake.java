@@ -7,5 +7,5 @@ import retrofit2.http.GET;
 
 public interface RetroBake {
     @GET("baking.json")
-    Call<Bakings> getData();
+    Call<List<Baking>> getData();
 }

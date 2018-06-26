@@ -34,19 +34,19 @@ public class HostActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetroBake retroBake = retrofit.create(RetroBake.class);
-        Call<Bakings> call = retroBake.getData();
-        call.enqueue(new Callback<Bakings>() {
-            @Override
-            public void onResponse(Call<Bakings> call, Response<Bakings> response) {
-                Bakings bakings = response.body();
-                Toast.makeText(HostActivity.this,"Gottee " + bakings.toString(), Toast.LENGTH_LONG).show();
-            }
+            Call<List<Baking>> call = retroBake.getData();
+            call.enqueue(new Callback<List<Baking>>() {
+                @Override
+                public void onResponse(Call<List<Baking>> call, Response<List<Baking>> response) {
+                    Baking bakings = response.body().get(0);
+                    Toast.makeText(HostActivity.this,"Gottee " + bakings.getName(), Toast.LENGTH_LONG).show();
+                }
 
-            @Override
-            public void onFailure(Call<Bakings> call, Throwable t) {
-                Toast.makeText(HostActivity.this,"Failed :)", Toast.LENGTH_LONG).show();
-            }
-        });
-
+                @Override
+                public void onFailure(Call<List<Baking>> call, Throwable t) {
+                    t.printStackTrace();
+                    Toast.makeText(HostActivity.this,"Failed :)", Toast.LENGTH_LONG).show();
+                }
+            });
     }
 }
