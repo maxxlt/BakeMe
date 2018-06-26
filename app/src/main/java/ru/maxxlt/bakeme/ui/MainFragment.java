@@ -21,11 +21,10 @@ public class MainFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main,container,false);
         RecyclerView recyclerView = rootView.findViewById(R.id.main_fragment_recycler);
-        stringArrayList = new ArrayList<>();
-        stringArrayList.add("Title1");
-        stringArrayList.add("Title2");
-        stringArrayList.add("Title3");
-        stringArrayList.add("Title4");
+            stringArrayList = new ArrayList<>();
+            stringArrayList.add("");
+            stringArrayList.add("");
+            stringArrayList.add("");
         MainFragmentAdapter mainFragmentAdapter = new MainFragmentAdapter(stringArrayList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(mainFragmentAdapter);
