@@ -7,23 +7,23 @@ import java.util.List;
 
 public class Baking {
 
-//    @SerializedName("id")
-//    @Expose
+    @SerializedName("id")
+    @Expose
     private int id;
-//    @SerializedName("name")
-//    @Expose
+    @SerializedName("name")
+    @Expose
     private String name;
-//    @SerializedName("ingredients")
-//    @Expose
+    @SerializedName("ingredients")
+    @Expose
     private List<Ingredients> ingredients = null;
-//    @SerializedName("steps")
-//    @Expose
+    @SerializedName("steps")
+    @Expose
     private List<Steps> steps = null;
-//    @SerializedName("servings")
-//    @Expose
+    @SerializedName("servings")
+    @Expose
     private int servings;
-//    @SerializedName("image")
-//    @Expose
+    @SerializedName("image")
+    @Expose
     private String image;
 
     public int getId() {
