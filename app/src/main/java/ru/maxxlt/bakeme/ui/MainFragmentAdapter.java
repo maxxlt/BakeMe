@@ -9,14 +9,28 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.maxxlt.bakeme.R;
+import ru.maxxlt.bakeme.data.Baking;
 
 public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapter.ViewHolder> {
-    private ArrayList<String> stringArrayList;
+    private List<Baking> bakings;
 
-    public MainFragmentAdapter(ArrayList<String> stringArrayList) {
-        this.stringArrayList = stringArrayList;
+    public List<Baking> getBakings() {
+        return bakings;
+    }
+
+    public void setBakings(List<Baking> bakings) {
+        this.bakings = bakings;
+        notifyDataSetChanged();
+    }
+
+    public MainFragmentAdapter(List<Baking> bakings) {
+        this.bakings = bakings;
+    }
+
+    public MainFragmentAdapter() {
     }
 
     @NonNull
@@ -29,12 +43,12 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.textView.setText(stringArrayList.get(position));
+        viewHolder.textView.setText(bakings.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return stringArrayList.size();
+        return bakings.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
