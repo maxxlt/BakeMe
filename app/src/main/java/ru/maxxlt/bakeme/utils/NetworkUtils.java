@@ -8,11 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import ru.maxxlt.bakeme.data.Baking;
 
-public class networkUtils {
+public class NetworkUtils {
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/";
     private RetroBake retroBake;
 
-    public networkUtils() {
+    public NetworkUtils() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
