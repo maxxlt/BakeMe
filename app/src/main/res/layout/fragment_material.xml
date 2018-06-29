@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/title_tv"
                 android:gravity="center"
-                android:text="@{bakery.}"/>
+                android:text="@{bakery.baking.name}"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 </layout>

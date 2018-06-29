@@ -1,8 +1,11 @@
 package ru.maxxlt.bakeme.models;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
@@ -10,11 +13,34 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ru.maxxlt.bakeme.HostActivity;
 import ru.maxxlt.bakeme.data.Baking;
 import ru.maxxlt.bakeme.utils.NetworkUtils;
 
-public class BakingListViewModel extends ViewModel {
+public class BakingListViewModel extends AndroidViewModel {
+    private static final String TAG = BakingListViewModel.class.getSimpleName();
     private MutableLiveData<List<Baking>> sharingIsCaringBakery;
+
+    public BakingListViewModel(@NonNull Application application) {
+        super(application);
+        if (getSharingIsCaringBakery() == null){
+            sharingIsCaringBakery = new MutableLiveData<>();
+            NetworkUtils networkUtils = new NetworkUtils();
+            networkUtils.getCallBake().enqueue(new Callback<List<Baking>>() {
+                @Override
+                public void onResponse(Call<List<Baking>> call, Response<List<Baking>> response) {
+                    Log.v(TAG,"Data parsed!");
+                    sharingIsCaringBakery.setValue(response.body());
+                }
+
+                @Override
+                public void onFailure(Call<List<Baking>> call, Throwable t) {
+                    Log.v(TAG,"Failed to pass data!");
+                }
+            });
+        }
+
+    }
 
     public LiveData<List<Baking>> getSharingIsCaringBakery() {
         return sharingIsCaringBakery;
