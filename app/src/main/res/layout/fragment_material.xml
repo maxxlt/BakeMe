@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <data>
-        <variable
-            name="bakery"
-            type="ru.maxxlt.bakeme.models.MainFragmentSkeleton"/>
-    </data>
-
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_fragment_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:elevation="6dp"
+        app:cardCornerRadius="4dp">
 
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:elevation="6dp"
-            android:layout_margin="10dp"
-            app:cardCornerRadius="4dp"
-            android:id="@+id/card_view_fragment_main">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:id="@+id/title_tv"
-                android:gravity="center"
-                android:text="@{bakery.baking.name}"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-</layout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/servings_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
