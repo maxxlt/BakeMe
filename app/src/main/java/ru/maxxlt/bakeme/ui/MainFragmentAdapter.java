@@ -43,7 +43,7 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
     @NonNull
     @Override
     public MainFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_material, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_main_material, parent, false);
         return new ViewHolder(view);
     }
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BakeMe</string>
+    <string name="title_ingredients">Ingredients:</string>
+    <string name="title_steps">Steps:</string>
 </resources>

@@ -47,7 +47,7 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.main_fragment_recycler);
         final MainFragmentAdapter mainFragmentAdapter = new MainFragmentAdapter();
-        BakingListViewModel bakingListViewModel = ViewModelProviders.of(this).get(BakingListViewModel.class);
+        BakingListViewModel bakingListViewModel = ViewModelProviders.of(getActivity()).get(BakingListViewModel.class);
         bakingListViewModel.getSharingIsCaringBakery().observe(this, new Observer<List<Baking>>() {
             @Override
             public void onChanged(@Nullable List<Baking> bakings) {
