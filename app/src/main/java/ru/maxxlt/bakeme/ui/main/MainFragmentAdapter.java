@@ -1,4 +1,4 @@
-package ru.maxxlt.bakeme.ui;
+package ru.maxxlt.bakeme.ui.main;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -1,7 +1,8 @@
-package ru.maxxlt.bakeme.ui;
+package ru.maxxlt.bakeme.ui.detail;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,10 +23,30 @@ import ru.maxxlt.bakeme.data.Steps;
 import ru.maxxlt.bakeme.models.BakingListViewModel;
 
 public class DetailFragment extends Fragment {
+
+    StepParse stepParse;
+
+
+    public interface StepParse {
+        void stepParsed(int position);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            stepParse = (StepParse) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString()
+                    + " must implement ParseData");
+        }
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_detail,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         final int position = getArguments().getInt("bakeposition");
         Log.v("DetailFragment: ","position " + position);
         RecyclerView ingredientsView = rootView.findViewById(R.id.ingredients_rv);
@@ -46,16 +67,26 @@ public class DetailFragment extends Fragment {
                 ingredientsAdapter.setIngredientsList(ingredientsList);
                 stepsAdapter.setStepsList(stepsList);
 
-                ingredientsAdapter.notifyDataSetChanged();
-                stepsAdapter.notifyDataSetChanged();
+                stepsAdapter.setOnStepClickListener(new StepsAdapter.OnStepClickListener() {
+                    @Override
+                    public void onStepSelected(int position) {
+                        stepParse.stepParsed(position);
+                    }
+                });
             }
         });
-
+        ingredientsAdapter.notifyDataSetChanged();
+        stepsAdapter.notifyDataSetChanged();
         ingredientsView.setAdapter(ingredientsAdapter);
         ingredientsView.setLayoutManager(new LinearLayoutManager(getActivity()));
         stepsView.setAdapter(stepsAdapter);
         stepsView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 }

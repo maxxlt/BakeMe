@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.maxxlt.bakeme.HostActivity;
 import ru.maxxlt.bakeme.data.Baking;
+import ru.maxxlt.bakeme.test.Sample;
 import ru.maxxlt.bakeme.utils.NetworkUtils;
 
 public class BakingListViewModel extends AndroidViewModel {
@@ -38,6 +39,9 @@ public class BakingListViewModel extends AndroidViewModel {
                     Log.v(TAG,"Failed to pass data!");
                 }
             });
+            //offline test
+//            Sample sample = new Sample();
+//            sharingIsCaringBakery.setValue(sample.getBakingList());
         }
 
     }

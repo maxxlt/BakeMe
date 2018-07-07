@@ -9,7 +9,7 @@
     <!-- The static MasterListFragment -->
     <fragment
         android:id="@+id/master_list_fragment"
-        android:name="ru.maxxlt.bakeme.ui.MainFragment"
+        android:name="ru.maxxlt.bakeme.ui.main.MainFragment"
         android:layout_width="400dp"
         android:layout_height="match_parent" />
 

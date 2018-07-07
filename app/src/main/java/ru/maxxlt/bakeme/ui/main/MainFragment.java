@@ -1,4 +1,4 @@
-package ru.maxxlt.bakeme.ui;
+package ru.maxxlt.bakeme.ui.main;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,9 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.maxxlt.bakeme.R;
@@ -25,6 +23,8 @@ import ru.maxxlt.bakeme.models.BakingListViewModel;
 public class MainFragment extends Fragment {
 
     ParseData parseData;
+
+
 
     public interface ParseData{
         void dataParsed(int position);
@@ -50,7 +50,7 @@ public class MainFragment extends Fragment {
         BakingListViewModel bakingListViewModel = ViewModelProviders.of(getActivity()).get(BakingListViewModel.class);
         bakingListViewModel.getSharingIsCaringBakery().observe(this, new Observer<List<Baking>>() {
             @Override
-            public void onChanged(@Nullable List<Baking> bakings) {
+            public void onChanged(@Nullable final List<Baking> bakings) {
                 mainFragmentAdapter.setBakingList(bakings);
                 mainFragmentAdapter.setOnTitleClickListener(new MainFragmentAdapter.OnTitleClickListener() {
                     @Override
