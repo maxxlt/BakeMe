@@ -18,7 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <receiver android:name=".widget.BakeMeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bake_me_widget_info" />
+        </receiver>
+
+        <service android:name=".widget.RecipeService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+    </application>
 
 </manifest>

@@ -4,4 +4,6 @@
     <string name="title_steps">Steps:</string>
     <string name="step_next">Next</string>
     <string name="step_previous">Previous</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

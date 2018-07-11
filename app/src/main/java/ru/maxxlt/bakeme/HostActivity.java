@@ -3,6 +3,7 @@ package ru.maxxlt.bakeme;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import ru.maxxlt.bakeme.ui.detail.DetailFragment;
@@ -15,6 +16,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
     DetailFragment detailFragment;
     StepFragment stepFragment;
     int positionMain, positionStep;
+    boolean detailFragmentAdded;
     Bundle stepBundle = new Bundle(), detailBundle = new Bundle(), buttonBundle = new Bundle();
 
     @Override
@@ -33,16 +35,28 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
                         .commit();
             }
         }
+        else {
+            positionMain = savedInstanceState.getInt("positionmain");
+            positionStep = savedInstanceState.getInt("positionstep");
+            detailFragmentAdded = savedInstanceState.getBoolean("detailfragadded");
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("positionmain",positionMain);
+        outState.putInt("positionstep",positionStep);
+        outState.putBoolean("detailfragadded",detailFragmentAdded);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void dataParsed(int position) {
         positionMain = position;
+        detailFragmentAdded = true;
         if (detailBundle.containsKey("stepposition"))
             detailBundle.remove("stepposition");
         detailBundle.putInt("bakeposition", position);
-        detailBundle.putBoolean("bigscreensize", twoPane);
         detailFragment = new DetailFragment();
         detailFragment.setArguments(detailBundle);
         if (twoPane) {
@@ -62,27 +76,34 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
     public void onBackPressed() {
         //check what fragment is current: Detail or Steps
         if (!twoPane) {
-            if (detailFragment.isAdded()) {
+            if (detailFragmentAdded) {
                 MainFragment mainFragment = new MainFragment();
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.master_list_fragment, mainFragment)
                         .commit();
             } else {
+                detailFragmentAdded = true;
+                detailFragment = new DetailFragment();
+                detailBundle.putInt("bakeposition", positionMain);
+                detailFragment.setArguments(detailBundle);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.master_list_fragment, detailFragment)
                         .commit();
             }
         } else {
-            if (detailFragment.isAdded()) {
-                MainFragment mainFragment = new MainFragment();
+            if (detailFragmentAdded) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_detail, mainFragment)
+                        .remove(detailFragment)
                         .commit();
             } else {
+                detailFragmentAdded = true;
+                detailFragment = new DetailFragment();
+                detailBundle.putInt("bakeposition", positionMain);
+                detailFragment.setArguments(detailBundle);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_detail, detailFragment)
+                        .replace(R.id.master_list_fragment, detailFragment)
                         .commit();
             }
         }
@@ -91,10 +112,14 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
     @Override
     public void stepParsed(int position) {
         positionStep = position;
+        detailFragmentAdded = false;
         if (stepBundle.containsKey("stepposition"))
             stepBundle.remove("stepposition");
         stepBundle.putInt("stepposition", position);
         stepBundle.putInt("bakepostion", positionMain);
+        stepBundle.putBoolean("isTwoPane",twoPane);
+        Log.v(TAG,"main position: " + positionMain);
+        Log.v(TAG,"step position: " + positionStep);
         stepFragment = new StepFragment();
         stepFragment.setArguments(stepBundle);
         if (twoPane){
@@ -116,6 +141,9 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
             buttonBundle.remove("stepposition");
         buttonBundle.putInt("stepposition", position);
         buttonBundle.putInt("bakepostion", positionMain);
+        buttonBundle.putBoolean("isTwoPane",twoPane);
+        Log.v(TAG,"main position: " + positionMain);
+        Log.v(TAG,"step position: " + positionStep);
         stepFragment = new StepFragment();
         stepFragment.setArguments(buttonBundle);
         if (twoPane){
