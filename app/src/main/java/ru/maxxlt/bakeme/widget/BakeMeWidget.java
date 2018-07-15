@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,6 +68,10 @@ public class BakeMeWidget extends AppWidgetProvider {
                     baking = response.body().get(0);
                     outOfBound = true;
                 }
+                else if (position < 0){
+                    baking = response.body().get(response.body().size()-1);
+                    outOfBound = true;
+                }
                 else {
                     baking = response.body().get(position);
                 }
@@ -82,6 +87,8 @@ public class BakeMeWidget extends AppWidgetProvider {
                 Log.v(TAG,"test stringArrayList: " + stringArrayList.get(0));
                 Intent intent = new Intent(context,RecipeService.class);
                 intent.putStringArrayListExtra("ingrlist", stringArrayList);
+                Random random = new Random();
+                intent.setType(String.valueOf(random.nextInt(1000)));
                 views.setTextViewText(R.id.widget_recipe_title_tv,baking.getName());
                 views.setRemoteAdapter(R.id.widget_list, intent);
 
@@ -99,7 +106,7 @@ public class BakeMeWidget extends AppWidgetProvider {
                 leftClickIntent.setAction(ACTION_LEFTCLICK);
                 leftClickIntent.putExtra("appWidgetId",appWidgetId);
                 if (outOfBound)
-                    leftClickIntent.putExtra("position",0);
+                    leftClickIntent.putExtra("position",response.body().size()-1);
                 else
                     leftClickIntent.putExtra("position",position);
                 PendingIntent leftClickPendingIntent = PendingIntent.getBroadcast(context,0,leftClickIntent,PendingIntent.FLAG_UPDATE_CURRENT);
@@ -125,9 +132,16 @@ public class BakeMeWidget extends AppWidgetProvider {
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             int appWidgetId = intent.getIntExtra("appWidgetId",100);
             setupAdapter(pos+1,context, appWidgetManager, appWidgetId);
-
         }
+        else if (ACTION_LEFTCLICK.equals(intent.getAction())) {
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            int appWidgetId = intent.getIntExtra("appWidgetId",100);
+            setupAdapter(pos-1,context, appWidgetManager, appWidgetId);
+        }
+
         super.onReceive(context, intent);
     }
+
+
 }
 
