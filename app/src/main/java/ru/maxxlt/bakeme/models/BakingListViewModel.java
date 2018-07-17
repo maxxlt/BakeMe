@@ -15,6 +15,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.maxxlt.bakeme.HostActivity;
 import ru.maxxlt.bakeme.data.Baking;
+import ru.maxxlt.bakeme.test.EspressoIdlingResource;
 import ru.maxxlt.bakeme.test.Sample;
 import ru.maxxlt.bakeme.utils.NetworkUtils;
 
@@ -27,15 +28,18 @@ public class BakingListViewModel extends AndroidViewModel {
         if (getSharingIsCaringBakery() == null){
             sharingIsCaringBakery = new MutableLiveData<>();
             NetworkUtils networkUtils = new NetworkUtils();
+            EspressoIdlingResource.increment();
             networkUtils.getCallBake().enqueue(new Callback<List<Baking>>() {
                 @Override
                 public void onResponse(Call<List<Baking>> call, Response<List<Baking>> response) {
+                    EspressoIdlingResource.decrement();
                     Log.v(TAG,"Data parsed!");
                     sharingIsCaringBakery.setValue(response.body());
                 }
 
                 @Override
                 public void onFailure(Call<List<Baking>> call, Throwable t) {
+                    EspressoIdlingResource.decrement();
                     Log.v(TAG,"Failed to pass data!");
                 }
             });
