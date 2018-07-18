@@ -4,19 +4,19 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.exoplayer2.C;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.maxxlt.bakeme.HostActivity;
 import ru.maxxlt.bakeme.data.Baking;
 import ru.maxxlt.bakeme.test.EspressoIdlingResource;
-import ru.maxxlt.bakeme.test.Sample;
 import ru.maxxlt.bakeme.utils.NetworkUtils;
 
 public class BakingListViewModel extends AndroidViewModel {
@@ -43,13 +43,9 @@ public class BakingListViewModel extends AndroidViewModel {
                     Log.v(TAG,"Failed to pass data!");
                 }
             });
-            //offline test
-//            Sample sample = new Sample();
-//            sharingIsCaringBakery.setValue(sample.getBakingList());
         }
 
     }
-
     public LiveData<List<Baking>> getSharingIsCaringBakery() {
         return sharingIsCaringBakery;
     }

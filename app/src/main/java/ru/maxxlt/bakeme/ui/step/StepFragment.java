@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -22,6 +24,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -31,12 +34,16 @@ import ru.maxxlt.bakeme.data.Steps;
 import ru.maxxlt.bakeme.models.BakingListViewModel;
 
 public class StepFragment extends Fragment {
+    private static final String TAG = StepFragment.class.getSimpleName();
     PlayerView playerView;
     SimpleExoPlayer exoPlayer;
     TextView description;
+    ImageView thumbnailView, noThumbnailView;
     Button button_next, button_previous;
     int stepPosition, mainPosition;
-    boolean isTwoPane;
+    long videoPosition;
+    boolean isTwoPane, playWhenReady;
+    String url;
 
     OnButtonClickListener onButtonClickListener;
 
@@ -55,10 +62,16 @@ public class StepFragment extends Fragment {
         }
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.v(TAG,"VIEW CREATED");
         final View rootView = inflater.inflate(R.layout.fragment_steps, container, false);
+        if (savedInstanceState != null){
+            videoPosition = savedInstanceState.getLong("videoPosition");
+            Log.v(TAG, "position pulled: " + videoPosition);
+        }
 
         stepPosition = getArguments().getInt("stepposition");
         mainPosition = getArguments().getInt("bakepostion");
@@ -68,8 +81,13 @@ public class StepFragment extends Fragment {
         description = rootView.findViewById(R.id.description_tv);
         button_next = rootView.findViewById(R.id.button_next);
         button_previous = rootView.findViewById(R.id.button_previous);
+        thumbnailView = rootView.findViewById(R.id.thumbnail_iv);
+        noThumbnailView = rootView.findViewById(R.id.unavailable_thumbnail_iv);
 
-        BakingListViewModel bakingListViewModel = ViewModelProviders.of(getActivity()).get(BakingListViewModel.class);
+        noThumbnailView.setVisibility(View.GONE);
+
+
+        final BakingListViewModel bakingListViewModel = ViewModelProviders.of(getActivity()).get(BakingListViewModel.class);
         bakingListViewModel.getSharingIsCaringBakery().observe(this, new Observer<List<Baking>>() {
             @Override
             public void onChanged(@Nullable List<Baking> bakings) {
@@ -81,10 +99,15 @@ public class StepFragment extends Fragment {
                     } else if (stepPosition == baking.getSteps().size() - 1) {
                         button_next.setVisibility(View.GONE);
                     }
-                    if (steps.getVideoURL().equals("")) {
-                        playerView.setVisibility(View.GONE);
-                    }
 
+                    if (steps.getVideoURL().equals("")) {
+                        playerView.setVisibility(View.INVISIBLE);
+                        if (steps.getThumbnailURL().equals("")){
+                            noThumbnailView.setVisibility(View.VISIBLE);
+                        }
+                        else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
+                    }
                     description.setText(steps.getDescription());
                     button_next.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -101,7 +124,12 @@ public class StepFragment extends Fragment {
                 } else if (rootView.findViewById(R.id.landscape_steps_layout) != null) {
                         hideSystemUI(rootView);
                     if (steps.getVideoURL().equals("")) {
-                        playerView.setVisibility(View.GONE);
+                        playerView.setVisibility(View.INVISIBLE);
+                        if (steps.getThumbnailURL().equals("")){
+                            noThumbnailView.setVisibility(View.VISIBLE);
+                        }
+                        else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
                     }
                 }
                 else {
@@ -111,7 +139,12 @@ public class StepFragment extends Fragment {
                         button_next.setVisibility(View.GONE);
                     }
                     if (steps.getVideoURL().equals("")) {
-                        playerView.setVisibility(View.GONE);
+                        playerView.setVisibility(View.INVISIBLE);
+                        if (steps.getThumbnailURL().equals("")){
+                            noThumbnailView.setVisibility(View.VISIBLE);
+                        }
+                        else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
                     }
 
                     description.setText(steps.getDescription());
@@ -128,8 +161,8 @@ public class StepFragment extends Fragment {
                         }
                     });
                 }
-                setPlayer(steps.getVideoURL());
-
+                url = steps.getVideoURL();
+                setPlayer(url);
             }
         });
         return rootView;
@@ -145,14 +178,28 @@ public class StepFragment extends Fragment {
                                 "BakeMe"));
         ExtractorMediaSource extractorMediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(url));
-
         exoPlayer.prepare(extractorMediaSource);
-        exoPlayer.setPlayWhenReady(true);
+        if (videoPosition != C.TIME_UNSET) {
+            exoPlayer.seekTo(videoPosition);
+        }
+        exoPlayer.setPlayWhenReady(false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            videoPosition = savedInstanceState.getLong("videoPosition");
+            playWhenReady = savedInstanceState.getBoolean("playWhenReady");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("videoPosition",videoPosition);
+        outState.putBoolean("playWhenReady", playWhenReady);
+        Log.v(TAG, "position saved: " + videoPosition);
     }
 
 
@@ -179,9 +226,19 @@ public class StepFragment extends Fragment {
 
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onResume() {
+        super.onResume();
+        if (playerView != null){
+            setPlayer(url);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v(TAG, "VIEW STOPPED");
         if (playerView != null) {
+            videoPosition = exoPlayer.getCurrentPosition();
             playerView.setPlayer(null);
             exoPlayer.stop();
             exoPlayer.release();

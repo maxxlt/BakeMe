@@ -22,6 +22,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v(TAG, "ACTIVITY CREATED");
         setContentView(R.layout.activity_host);
         if (findViewById(R.id.bake_me_linear_layout) != null) {
             twoPane = true;
@@ -67,6 +68,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.master_list_fragment, detailFragment)
                     .commit();
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
     }
@@ -135,6 +137,27 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        MainFragment mainFragment = new MainFragment();
+        if (detailFragmentAdded) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.master_list_fragment, mainFragment)
+                    .commit();
+            detailFragmentAdded = false;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.master_list_fragment, detailFragment)
+                    .commit();
+            detailFragmentAdded = true;
+        }
+        return true;
+    }
+
+    @Override
     public void buttonClicked(int position) {
         positionStep = position;
         if (buttonBundle.containsKey("stepposition"))
@@ -142,10 +165,9 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
         buttonBundle.putInt("stepposition", position);
         buttonBundle.putInt("bakepostion", positionMain);
         buttonBundle.putBoolean("isTwoPane",twoPane);
-        Log.v(TAG,"main position: " + positionMain);
-        Log.v(TAG,"step position: " + positionStep);
         stepFragment = new StepFragment();
         stepFragment.setArguments(buttonBundle);
+
         if (twoPane){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_detail, stepFragment)
