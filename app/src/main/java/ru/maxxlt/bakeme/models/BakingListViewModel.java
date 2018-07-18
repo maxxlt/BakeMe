@@ -7,9 +7,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.exoplayer2.C;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,7 +22,7 @@ public class BakingListViewModel extends AndroidViewModel {
 
     public BakingListViewModel(@NonNull Application application) {
         super(application);
-        if (getSharingIsCaringBakery() == null){
+        if (getSharingIsCaringBakery() == null) {
             sharingIsCaringBakery = new MutableLiveData<>();
             NetworkUtils networkUtils = new NetworkUtils();
             EspressoIdlingResource.increment();
@@ -33,26 +30,29 @@ public class BakingListViewModel extends AndroidViewModel {
                 @Override
                 public void onResponse(Call<List<Baking>> call, Response<List<Baking>> response) {
                     EspressoIdlingResource.decrement();
-                    Log.v(TAG,"Data parsed!");
+                    Log.v(TAG, "Data parsed!");
                     sharingIsCaringBakery.setValue(response.body());
                 }
 
                 @Override
                 public void onFailure(Call<List<Baking>> call, Throwable t) {
                     EspressoIdlingResource.decrement();
-                    Log.v(TAG,"Failed to pass data!");
+                    Log.v(TAG, "Failed to pass data!");
                 }
             });
         }
 
     }
+
     public LiveData<List<Baking>> getSharingIsCaringBakery() {
         return sharingIsCaringBakery;
     }
+
     public void setListToLiveData(List<Baking> bakingList) {
         this.sharingIsCaringBakery.setValue(bakingList);
     }
-    public void postListToLiveData(List<Baking> bakingList){
+
+    public void postListToLiveData(List<Baking> bakingList) {
         this.sharingIsCaringBakery.postValue(bakingList);
     }
 }

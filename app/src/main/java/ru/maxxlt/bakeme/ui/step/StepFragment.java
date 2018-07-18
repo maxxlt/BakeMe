@@ -66,9 +66,9 @@ public class StepFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.v(TAG,"VIEW CREATED");
+        Log.v(TAG, "VIEW CREATED");
         final View rootView = inflater.inflate(R.layout.fragment_steps, container, false);
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getLong("videoPosition");
             Log.v(TAG, "position pulled: " + videoPosition);
         }
@@ -102,11 +102,10 @@ public class StepFragment extends Fragment {
 
                     if (steps.getVideoURL().equals("")) {
                         playerView.setVisibility(View.INVISIBLE);
-                        if (steps.getThumbnailURL().equals("")){
+                        if (steps.getThumbnailURL().equals("")) {
                             noThumbnailView.setVisibility(View.VISIBLE);
-                        }
-                        else
-                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
+                        } else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.invalid_thumbnail).error(R.drawable.invalid_thumbnail).into(thumbnailView);
                     }
                     description.setText(steps.getDescription());
                     button_next.setOnClickListener(new View.OnClickListener() {
@@ -122,17 +121,15 @@ public class StepFragment extends Fragment {
                         }
                     });
                 } else if (rootView.findViewById(R.id.landscape_steps_layout) != null) {
-                        hideSystemUI(rootView);
+                    hideSystemUI(rootView);
                     if (steps.getVideoURL().equals("")) {
                         playerView.setVisibility(View.INVISIBLE);
-                        if (steps.getThumbnailURL().equals("")){
+                        if (steps.getThumbnailURL().equals("")) {
                             noThumbnailView.setVisibility(View.VISIBLE);
-                        }
-                        else
-                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
+                        } else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.invalid_thumbnail).error(R.drawable.invalid_thumbnail).into(thumbnailView);
                     }
-                }
-                else {
+                } else {
                     if (stepPosition == 0) {
                         button_previous.setVisibility(View.GONE);
                     } else if (stepPosition == baking.getSteps().size() - 1) {
@@ -140,11 +137,10 @@ public class StepFragment extends Fragment {
                     }
                     if (steps.getVideoURL().equals("")) {
                         playerView.setVisibility(View.INVISIBLE);
-                        if (steps.getThumbnailURL().equals("")){
+                        if (steps.getThumbnailURL().equals("")) {
                             noThumbnailView.setVisibility(View.VISIBLE);
-                        }
-                        else
-                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.static_image).error(R.drawable.static_image).into(thumbnailView);
+                        } else
+                            Picasso.get().load(steps.getThumbnailURL()).placeholder(R.drawable.invalid_thumbnail).error(R.drawable.invalid_thumbnail).into(thumbnailView);
                     }
 
                     description.setText(steps.getDescription());
@@ -197,7 +193,7 @@ public class StepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong("videoPosition",videoPosition);
+        outState.putLong("videoPosition", videoPosition);
         outState.putBoolean("playWhenReady", playWhenReady);
         Log.v(TAG, "position saved: " + videoPosition);
     }
@@ -228,7 +224,7 @@ public class StepFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (playerView != null){
+        if (playerView != null) {
             setPlayer(url);
         }
     }

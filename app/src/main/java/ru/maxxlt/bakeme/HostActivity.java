@@ -26,6 +26,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
         setContentView(R.layout.activity_host);
         if (findViewById(R.id.bake_me_linear_layout) != null) {
             twoPane = true;
+
         }
         if (savedInstanceState == null) {
             if (findViewById(R.id.master_list_fragment) != null) {
@@ -35,8 +36,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
                         .replace(R.id.master_list_fragment, mainFragment)
                         .commit();
             }
-        }
-        else {
+        } else {
             positionMain = savedInstanceState.getInt("positionmain");
             positionStep = savedInstanceState.getInt("positionstep");
             detailFragmentAdded = savedInstanceState.getBoolean("detailfragadded");
@@ -45,9 +45,9 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("positionmain",positionMain);
-        outState.putInt("positionstep",positionStep);
-        outState.putBoolean("detailfragadded",detailFragmentAdded);
+        outState.putInt("positionmain", positionMain);
+        outState.putInt("positionstep", positionStep);
+        outState.putBoolean("detailfragadded", detailFragmentAdded);
         super.onSaveInstanceState(outState);
     }
 
@@ -119,17 +119,16 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
             stepBundle.remove("stepposition");
         stepBundle.putInt("stepposition", position);
         stepBundle.putInt("bakepostion", positionMain);
-        stepBundle.putBoolean("isTwoPane",twoPane);
-        Log.v(TAG,"main position: " + positionMain);
-        Log.v(TAG,"step position: " + positionStep);
+        stepBundle.putBoolean("isTwoPane", twoPane);
+        Log.v(TAG, "main position: " + positionMain);
+        Log.v(TAG, "step position: " + positionStep);
         stepFragment = new StepFragment();
         stepFragment.setArguments(stepBundle);
-        if (twoPane){
+        if (twoPane) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_detail, stepFragment)
                     .commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.master_list_fragment, stepFragment)
                     .commit();
@@ -146,8 +145,7 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
                     .commit();
             detailFragmentAdded = false;
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        else {
+        } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.master_list_fragment, detailFragment)
@@ -164,16 +162,15 @@ public class HostActivity extends AppCompatActivity implements MainFragment.Pars
             buttonBundle.remove("stepposition");
         buttonBundle.putInt("stepposition", position);
         buttonBundle.putInt("bakepostion", positionMain);
-        buttonBundle.putBoolean("isTwoPane",twoPane);
+        buttonBundle.putBoolean("isTwoPane", twoPane);
         stepFragment = new StepFragment();
         stepFragment.setArguments(buttonBundle);
 
-        if (twoPane){
+        if (twoPane) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_detail, stepFragment)
                     .commit();
-        }
-        else {
+        } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.master_list_fragment, stepFragment)
                     .commit();
