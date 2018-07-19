@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/tablet_steps_layout">
+    <ImageView
+        android:id="@+id/unavailable_thumbnail_iv"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@drawable/unavailable_image" />
+
+    <ImageView
+        android:id="@+id/thumbnail_iv"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
     <com.google.android.exoplayer2.ui.PlayerView
         android:layout_width="match_parent"
         android:layout_height="250dp"
